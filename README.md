@@ -1,4 +1,4 @@
-# anonimizza_log-21-22-
+# anonimizza_log_21-22
 Esercizio per l'anonimizzazione di un file di log estratti da e-learning (Insegnamento di Programmazione, a.a. 21/22)
 
 Scrivere un programma Python che legge una lista di log dal file “anonimizza_test1.json” (la struttura del file .json non è specificata e va preliminarmente determinata). 
