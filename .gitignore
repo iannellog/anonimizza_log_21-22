@@ -1,3 +1,9 @@
+# auxiliary files that should not be updated on remote repository
+indata/*
+outdata/*
+.idea
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
