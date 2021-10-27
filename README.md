@@ -5,15 +5,15 @@ Scrivere un programma Python che legge una lista di log dal file “anonimizza_t
 
 Ciascun elemento della lista di log è costituito dalle seguenti 9 informazioni:
 
-Data/Ora,
-Nome completo dell'utente
-Utente coinvolto
-Contesto dell'evento
-Componente
-Evento
-Descrizione
-Origine
-Indirizzo IP
+- Data/Ora
+- Nome completo dell'utente
+- Utente coinvolto
+- Contesto dell'evento
+- Componente
+- Evento
+- Descrizione
+- Origine
+- Indirizzo IP
 
 Il programma deve anonimizzare la lista. In particolare:
 - per ogni utente (campo “Nome completo dell'utente”) generare un identificatore unico (per esempio un numero progressivo) 
