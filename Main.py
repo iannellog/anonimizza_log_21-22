@@ -29,7 +29,7 @@ def anonymizeAndGetAssociations(jsonData):
         for userLog in logDays:
             codeToUserName[userIndex] = userLog[1]
             userLog[1] = userIndex  # User name
-            userLog[2] = None
+            userLog.remove(userLog[2])  # Removing involved user info
             userIndex += 1
     return codeToUserName
 
