@@ -21,6 +21,6 @@ Il programma deve anonimizzare la lista. In particolare:
 - generare una tabella che mantiene l’informazione di quale identificatore è stato associato a ciascun utente
 - eliminare da tutti i log il campo “Utente coinvolto”, che normalmente contiene la stringa “-“, ma potrebbe contenere anch’esso il nome dell’utente
 
-Il programma infine deve salvare la lista di log anonimizzata nello stesso formato di partenza (json) e la tabella che associa ciascun utente al suo identificatore unico (anche la tabella va salvata in forato json). Il file di log anonimizzato va salvato come lista di log, e ciascun log come una lista di informazioni. 
+Il programma infine deve salvare la lista di log anonimizzata nello stesso formato di partenza (json) e la tabella che associa ciascun utente al suo identificatore unico (anche la tabella va salvata in formato json). Il file di log anonimizzato va salvato come lista di log, e ciascun log come una lista di informazioni. 
 
 N.B. Non è necessario sviluppare subito tutte le funzioni richieste. Procedere anche per gradi includendo inizialmente una parte delle funzioni. Per esempio, si potrebbe iniziare a creare solo la tabella che associa utenti e identificatori unici senza procedere ad anonimizzare i log.
