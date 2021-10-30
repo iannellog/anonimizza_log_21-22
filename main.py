@@ -52,7 +52,7 @@ def anonymizeAndGetAssociations(jsonData):
             reformatUserNameAndCompleteUserInfo(userLog)
             if userLog[1] in userNameToCode:
                 currentUserIndex = userNameToCode[userLog[1]]
-            if not userLog[1] in userNameToCode:  # Checks if user is present in dictionary
+            else:  # user not present in dictionary
                 currentUserIndex = str(userIndex).zfill(5)
                 userNameToCode[userLog[1]] = currentUserIndex  # Create a string of 5 characters adding missing zero before the number
                 userIndex += 1
