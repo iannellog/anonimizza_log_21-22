@@ -57,7 +57,7 @@ def get_user_anonymous_uuid_and_insert_if_not_present(log, dict_user):
     if user == '-':
         user = NO_USER  #giving default value if not present in both elements of log
 
-    if user in dict_user.keys():
+    if user in dict_user:
         return dict_user[user]
     else:
         new_id = uuid.uuid5(uuid.NAMESPACE_URL, user)  #creation of UUID value based on user value
