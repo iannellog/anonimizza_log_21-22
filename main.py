@@ -21,35 +21,42 @@ import uuid
 
 INDEX_COMPLETE_NAME = 1
 INDEX_AFFECTED_USER = 2
+NO_USER = "no-user"
 
 
 def read_and_return_json(path):
-    f_in = open(path)
-    data = json.load(f_in)
-    f_in.close()
-    return data
+    try:
+        f_in = open(path)
+        data = json.load(f_in)
+        f_in.close()
+        return True, data
+    except:
+        return False, []
 
 
 def get_logs_and_users_dict(json_logs_from_file):
     dict_user = dict()
     anonymous_all_logs = list()
 
-    for daily_logs_list in json_logs_from_file:
-        anonymous_daily_logs = list()
+    for logs_list in json_logs_from_file:
+        anonymous_logs = list()
 
-        for log in daily_logs_list:
+        for log in logs_list:
             user_id = get_user_anonymous_uuid_and_insert_if_not_present(log, dict_user)
             log[INDEX_COMPLETE_NAME] = user_id  # anonymous uuid in place of "Nome completo dell'utente"
             del log[INDEX_AFFECTED_USER]  # removing "Utente coinvolto"
-            anonymous_daily_logs.append(log)
+            anonymous_logs.append(log)
 
-        anonymous_all_logs.append(anonymous_daily_logs)
+        anonymous_all_logs.append(anonymous_logs)
 
     return anonymous_all_logs, dict_user
 
 
 def get_user_anonymous_uuid_and_insert_if_not_present(log, dict_user):
     user = log[INDEX_COMPLETE_NAME] if log[INDEX_COMPLETE_NAME] != '-' else log[INDEX_AFFECTED_USER]
+    if user == '-':
+        user = NO_USER  #giving default value if not present in both elements of log
+
     if user in dict_user.keys():
         return dict_user[user]
     else:
@@ -64,7 +71,7 @@ def save_to_path(values, path, indent=3):
         f_out = open(path, 'w')
         json.dump(values, f_out, indent=indent)
         f_out.close()
-    except NameError:
+    except:
         success = False
 
     return success
@@ -72,10 +79,14 @@ def save_to_path(values, path, indent=3):
 
 if __name__ == '__main__':
     print('Starting to anonymize logs...')
-    jsonData = read_and_return_json('indata/anonimizza_test1.json')
+    ok, jsonData = read_and_return_json('indata/anonimizza_test1.json')
+    if not ok:
+        print('Ops! Something went wrong during reading file!')
+        exit()
+
     logs, users_dict = get_logs_and_users_dict(jsonData)
     if save_to_path(logs, 'indata/anonimizza_test1_anonimizzato.json') \
             and save_to_path(users_dict, 'indata/anonimizza_test1_tab_codici.json'):
         print('Operations completed successfully!')
     else:
-        print('Ops! Something went wrong!')
+        print('Ops! Something went wrong during writing files!')
