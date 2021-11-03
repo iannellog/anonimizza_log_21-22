@@ -36,6 +36,11 @@ def SaveJsonFile(file, data):
     fout = open(file, 'w')
     json.dump(data, fout, indent=2)
     fout.close()
+    
+#This function checks if there is a User Name. If it's missing fills the field with the Involved user 
+def UserMissing(log):
+    if(log[1]=='-' and log[2] != '-'):
+        log[1], log[2]= log[2], log[1]
 
 """ 
 This function takes the log list as parameter and for every log switches
@@ -48,6 +53,7 @@ def Anonimize(log_list):
     code_tab = {}
     code = 1
     for log in log_list:
+        UserMissing(log)
         if not log[1] in code_tab:
             code_tab[log[1]] = str(code).zfill(5)
             code += 1
