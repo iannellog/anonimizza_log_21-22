@@ -22,7 +22,7 @@ IP adress
 
 import json
 
-"This function reads the json file and saves its data into a list of lists"
+#This function reads the json file and saves its data into a list of lists
 
 def ReadJsonFile(file):
     fin = open(file)
@@ -30,7 +30,7 @@ def ReadJsonFile(file):
     fin.close()
     return log_list
 
-"This function saves data onto a new json file"
+#This function saves data onto a new json file
 
 def SaveJsonFile(file, data):
     fout = open(file, 'w')
@@ -40,6 +40,7 @@ def SaveJsonFile(file, data):
 """ 
 This function takes the log list as parameter and for every log switches
 the Name of the User with a progressive code and deletes the involved user
+
 """
 
 def Anonimize(log_list):
@@ -50,14 +51,8 @@ def Anonimize(log_list):
         if not log[1] in code_tab:
             code_tab[log[1]] = str(code).zfill(5)
             code += 1
-
-#Eliminate the 2° column: WORKING ON A BETTER SOLUTION:
-#    maybe get rid of enumerate and replace pop with del
-#    and inside the same for loop?!
-
-    for i, log in enumerate(log_list):
+        log.remove(log[2])
         log[1] = code_tab[log[1]]
-        log_list[i].pop(2)
     return code_tab
 
 
