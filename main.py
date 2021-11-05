@@ -39,10 +39,7 @@ def anonymizeAndGetAssociations(jsonData):
                 currentUserIndex = str(userIndex).zfill(5)
                 userNameToCode[userLog[1]] = currentUserIndex  # Create a string of 5 characters adding missing zero before the number
                 userIndex += 1
-            if currentUserIndex == -1:
-                print('Error, cannot convert userName to unique index')
-            else:
-                userLog[1] = currentUserIndex
+            userLog[1] = currentUserIndex
             userLog.remove(userLog[2])  # Removing involved user info
     return userNameToCode
 
