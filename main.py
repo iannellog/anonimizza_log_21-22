@@ -3,6 +3,22 @@ Created on Oct. 29, 2021
 by Giulio Iannello
 
 Programma che anonimizza un file di log prdotto da moodle
+
+   I dati nel file json sono composti da: 
+    
+Data/Ora,
+Nome completo dell'utente
+Utente coinvolto
+Contesto dell'evento
+Componente
+Evento
+Descrizione
+Origine
+Indirizzo IP
+
+Anonimizzo il file ed elimono il dato 'Utente coinvolto';
+Se non è possibile individuare l'utente con 'Nome completo dell'utente'
+(poiche uguale a '-'), lo scambio con 'Utente coinvolto'
 """
 
 import json
