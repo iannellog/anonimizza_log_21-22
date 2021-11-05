@@ -16,15 +16,38 @@ Indirizzo IP
 
 
 def getJsonData(fileName):
-    jsonFile = open(fileName)
-    data = json.load(jsonFile)  # This is a list of lists
-    jsonFile.close()
-    return data
+    try:
+        jsonFile = open(fileName)
+        data = json.load(jsonFile)  # This is a list of lists
+        jsonFile.close()
+        return data
+    except OSError as e:
+        print(e)
+        exit()
+
+
+def saveOnFile(fileName, dumpData, indent=3):
+    try:
+        file = open(fileName, 'w')
+        json.dump(dumpData, file, indent=indent)
+        file.close()
+    except OSError as e:
+        print(e)
+        exit()
 
 
 def reformatUserNameAndCompleteUserInfo(userLog):
     if userLog[1] == '-' and userLog[2] != '-':
         userLog[1], userLog[2] = userLog[2], userLog[1]
+
+
+def getUserIndex(userLog, userNameToCode, userIndex):  #TODO: Cange this variable with uuid
+    if userLog[1] in userNameToCode:
+        return userNameToCode[userLog[1]], userIndex
+    currentUserIndex = str(userIndex).zfill(5)
+    userNameToCode[userLog[1]] = currentUserIndex  # Create a string of 5 characters adding missing zero before the number
+    userIndex += 1
+    return currentUserIndex, userIndex
 
 
 def anonymizeAndGetAssociations(jsonData):
@@ -33,21 +56,10 @@ def anonymizeAndGetAssociations(jsonData):
     for logDays in jsonData:
         for userLog in logDays:
             reformatUserNameAndCompleteUserInfo(userLog)
-            if userLog[1] in userNameToCode:
-                currentUserIndex = userNameToCode[userLog[1]]
-            else:  # user not present in dictionary
-                currentUserIndex = str(userIndex).zfill(5)
-                userNameToCode[userLog[1]] = currentUserIndex  # Create a string of 5 characters adding missing zero before the number
-                userIndex += 1
+            currentUserIndex, userIndex = getUserIndex(userLog, userNameToCode, userIndex)
             userLog[1] = currentUserIndex
             userLog.remove(userLog[2])  # Removing involved user info
     return userNameToCode
-
-
-def saveOnFile(fileName, dumpData, indent=3):
-    file = open(fileName, 'w')
-    json.dump(dumpData, file, indent=indent)
-    file.close()
 
 
 if __name__ == '__main__':
