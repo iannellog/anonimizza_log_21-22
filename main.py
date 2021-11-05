@@ -32,7 +32,6 @@ def anonymizeAndGetAssociations(jsonData):
     userIndex = 1
     for logDays in jsonData:
         for userLog in logDays:
-            currentUserIndex = -1  # -1 means error
             reformatUserNameAndCompleteUserInfo(userLog)
             if userLog[1] in userNameToCode:
                 currentUserIndex = userNameToCode[userLog[1]]
