@@ -22,25 +22,9 @@ def getJsonData(fileName):
     return data
 
 
-"""
-def anonymizeAndGetAssociations(jsonData):
-    codeToUserName = {}
-    userIndex = 1
-    for logDays in jsonData:
-        for userLog in logDays:
-            codeToUserName[userIndex] = userLog[1]
-            userLog[1] = userIndex  # User name
-            userLog.remove(userLog[2])  # Removing involved user info
-            userIndex += 1
-    return codeToUserName
-"""
-
-
 def reformatUserNameAndCompleteUserInfo(userLog):
     if userLog[1] == '-' and userLog[2] != '-':
-        temp = userLog[2]
-        userLog[2] = userLog[1]
-        userLog[1] = temp
+        userLog[1], userLog[2] = userLog[2], userLog[1]
 
 
 def anonymizeAndGetAssociations(jsonData):
