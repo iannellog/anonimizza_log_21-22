@@ -23,8 +23,9 @@ Il programma deve anonimizzare la lista. In particolare:
 
 Il programma infine deve salvare la lista di log anonimizzata nello stesso formato di partenza (json) e la tabella che associa ciascun utente al suo identificatore unico (anche la tabella va salvata in formato json). Il file di log anonimizzato va salvato come lista di log, e ciascun log come una lista di informazioni. 
 
-Miglioramenti da fare
-- Non includere nella tabella dei codici il simbolo '-'
-- nel caso 'Nome completo dell'utente' sia assente, utilizzare 'Utente coinvolto' per attribuire il log a un utente controllando che il nome sia presente nella tabella dei codici
+Nel caso in campo 'Nome completo dell'utente' sia vuoto (contiene il carattere '-') si utilizzi il campo 'Utente coinvolto' per attribuire il log a un utente. 
 
-N.B. Non è necessario sviluppare subito tutte le funzioni richieste. Procedere anche per gradi includendo inizialmente una parte delle funzioni. Per esempio, si potrebbe iniziare a creare solo la tabella che associa utenti e identificatori unici senza procedere ad anonimizzare i log.
+Il programma richiede di passare su linea di comando il path e il nome del file di ingresso. I dati anonimizzati e la tabella che associa gli utenti all'identificatore unico sono salvati in due file .json il cui nome termina con le stringhe '_anonimizzato' e '_usercodes'
+
+Ulteriori modifiche
+- usare argparse per implementare una CLI più flessibile
