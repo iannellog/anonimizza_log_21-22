@@ -1,4 +1,3 @@
 pane
 latte
 burro
-sale
