@@ -19,11 +19,16 @@ Expected data in a log of the file:
 -Description
 -Origin
 -IP adress
+
+Result of the program: 
+    -1 new json file that contains the ANONYMIZED list of the logs
+    -1 new json file that contains the list of users with their associated code 
 """
 
 
 import json
 import sys
+import uuid
 #import argparse
 
 
@@ -51,7 +56,8 @@ def SaveJsonFile(file, data):
         print('Something went wrong during the creation of the new file!')
         sys.exit()
     
-#This function checks if there is a User Name. If it's missing fills the field with the Involved user 
+#This function checks if there is a User Name. If it's missing fills the field with the Involved user
+#TODO: Remove useless log: NO USER and NO USER INVOLVED 
 def UserMissing(log):
     if(log[1]=='-' and log[2] != '-'):
         log[1], log[2]= log[2], log[1]
@@ -64,19 +70,18 @@ the Name of the User with a progressive code and deletes the involved user
 
 def Anonimize(log_list):
     log_list= log_list[0]
-    code_tab = {}
-    code = 1
+    id_tab = {}
     for log in log_list:
         UserMissing(log)
-        if not log[1] in code_tab:
-            code_tab[log[1]] = str(code).zfill(5)
-            code += 1
+        if not log[1] in id_tab:
+            new_id= uuid.uuid5(uuid.NAMESPACE_URL, log[1])
+            id_tab[log[1]] =str(new_id)
         log.remove(log[2])
-        log[1] = code_tab[log[1]]
-    return code_tab
+        log[1] = id_tab[log[1]]
+    return id_tab
 
 
-
+#TODO: Fix the parsing problem usin argparse
 jsonFile = 'indata/anonimizza_test1.json'
 log_list = ReadJsonFile(jsonFile)
 code_tab = Anonimize(log_list)
