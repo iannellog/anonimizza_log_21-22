@@ -73,8 +73,7 @@ codice = 1
 
 for log in log_list:
     nomecompleto_mancante(log)  # se il nome completo è vuoto interviene il sottoprogramma
-    if not log[
-               INDEX_NomeCompletoUtente] in tab_codici:  # controllo che il campo di interesse si trovi nelle chiavi della tabella
+    if not log[INDEX_NomeCompletoUtente] in tab_codici:  # controllo che il campo di interesse si trovi nelle chiavi della tabella
         # associo il secondo campo ad un codice che è una stringa di lunghezza fissa 5
         tab_codici[log[INDEX_NomeCompletoUtente]] = str(codice).zfill(5)
         codice += 1
