@@ -35,7 +35,7 @@ def read_jsonfile(file):
         fin.close()
         return log_list
     except:
-        print('*** errore *** Non è stato trovato nessun file)
+        print('*** errore *** Non è stato trovato nessun file')
         sys.exit()
 
         # sottoprogramma che salva il nuovo file in formato json
@@ -47,7 +47,7 @@ def save_jsonfile(file, data):
         json.dump(data, fout, indent=3)
         fout.close()
     except:
-        print('*** errore *** Il salvataggio non è andato a buon fine)
+        print('*** errore *** Il salvataggio non è andato a buon fine')
         sys.exit()
 
         # sottoprogramma che scambia il campo UTENTE COINVOLTO con il campo NOME COMPLETO DELL'UTENTE 
