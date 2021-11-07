@@ -29,7 +29,8 @@ Result of the program:
 import json
 import sys
 import uuid
-#import argparse
+import argparse
+from os.path import splitext
 
 
 #This function reads the json file and saves its data into a list of lists
@@ -57,10 +58,11 @@ def SaveJsonFile(file, data):
         sys.exit()
     
 #This function checks if there is a User Name. If it's missing fills the field with the Involved user
-#TODO: Remove useless log: NO USER and NO USER INVOLVED 
+
 def UserMissing(log):
     if(log[1]=='-' and log[2] != '-'):
         log[1], log[2]= log[2], log[1]
+        
 
 """ 
 This function takes the log list as parameter and for every log switches
@@ -73,19 +75,38 @@ def Anonimize(log_list):
     id_tab = {}
     for log in log_list:
         UserMissing(log)
-        if not log[1] in id_tab:
-            new_id= uuid.uuid5(uuid.NAMESPACE_URL, log[1])
-            id_tab[log[1]] =str(new_id)
-        log.remove(log[2])
+        if log[1] != '-':
+            if not log[1] in id_tab:
+                new_id= uuid.uuid5(uuid.NAMESPACE_URL, log[1])
+                id_tab[log[1]] =str(new_id)           
+        else:
+            log.clear()
+            continue
         log[1] = id_tab[log[1]]
+        log.remove(log[2])
     return id_tab
 
+
+# =============================================================================
+# try:
+#     inFname = sys.argv[1]
+#     name, extension = splitext(inFname)
+# except IndexError as e:
+#     print(e)
+#     sys.exit()
+# 
+# log_list= ReadJsonFile(inFname)[0]  # extract the list of logs
+# log_list, id_tab = Anonimize(log_list)
+# 
+# SaveJsonFile(log_list, name + '_anonymized' + extension)
+# SaveJsonFile(id_tab, name + '_userids' + extension)
+# =============================================================================
 
 #TODO: Fix the parsing problem usin argparse
 jsonFile = 'indata/anonimizza_test1.json'
 log_list = ReadJsonFile(jsonFile)
-code_tab = Anonimize(log_list)
+id_tab = Anonimize(log_list)
 SaveJsonFile('indata/anonymized1.json', log_list)
-SaveJsonFile('indata/code_table.json', code_tab)
+SaveJsonFile('indata/code_table.json', id_tab)
 
 print("Task Ended")
