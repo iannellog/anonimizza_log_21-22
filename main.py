@@ -15,7 +15,20 @@ Origine
 Indirizzo IP
 
 """
-
+def startParser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-i", "--input",
+                        help="The input file path and name",
+                        type=str,
+                        default='indata/anonimizza_test1.json')
+    parser.add_argument("-e", "--extension",
+                        help="Expected file extension",
+                        type=str,
+                        default='json')
+    parser.add_argument("-o", "--output",
+                        help="The output file path and name",
+                        type=str)
+    return parser.parse_args()
 
 def readJsonFile(fileName):
     try:
@@ -65,31 +78,31 @@ def anonymizeAndGetAssociations(jsonData):
     return userNameToCode
 
 
-def getInputFIleName():
-    for index, arg in enumerate(sys.argv):
-        if arg == '-i' and not sys.argv[index + 1].startswith("-"):
-            return sys.argv[index + 1]
-    return "indata/anonimizza_test1.json"
-
-
-def getBaseFilePath(fullPath):
-    extension = ".json"
-    extensionsStartsAt = inputFile.find(extension)
+def getBaseFilePath(fullPath, extension):
+    extensionsStartsAt = fullPath.find(extension)
     if extensionsStartsAt == -1:
         raise IndexError
-    return inputFile[:extensionsStartsAt], extension
+    return inputFile[:extensionsStartsAt]
 
+
+def argsOrDefault(arg, default, append):
+    if arg is not None:
+        return arg + append
+    else:
+        return default + append
 
 if __name__ == '__main__':
-    inputFile = getInputFIleName()
+    args = startParser()
+    inputFile=args.input
+    print(inputFile)
     try:
-        basePath, extension = getBaseFilePath(inputFile)
+        basePath = getBaseFilePath(inputFile, args.extension)
     except IndexError:
         print(IndexError.__name__, "\nError! the given fileName doesn't contains the specified extension")
         exit()
-    logFile = basePath + "_anonymized"
-    codeFile = basePath + "_codeFile"
+    logFile = argsOrDefault(args.output, basePath, "_anonymized")
+    codeFile = argsOrDefault(args.output, basePath, "_codeFile")
     toManipulate = readJsonFile(inputFile)
     idToNameAssociation = anonymizeAndGetAssociations(toManipulate)
-    saveJsonFile(logFile+extension, toManipulate)
-    saveJsonFile(codeFile+extension, idToNameAssociation)
+    saveJsonFile(logFile+args.extension, toManipulate)
+    saveJsonFile(codeFile+args.extension, idToNameAssociation)
