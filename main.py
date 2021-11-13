@@ -38,9 +38,9 @@ def initializeParser():
     return parser.parse_args()
 
 
-def readJsonFile(fileName):
+def readJsonFile(completeFilePath):
     try:
-        jsonFile = open(fileName)
+        jsonFile = open(completeFilePath)
         data = json.load(jsonFile)  # This is a list of lists
         jsonFile.close()
         return data
@@ -90,7 +90,7 @@ def anonymizeAndGetAssociations(jsonData):
     return userNameToCode
 
 
-def formatFilePath(args):
+def getFilePath_InputFileName_FileExtension(args):
     # Check if last words contains a dot
     filePath = args.path
     inputFileName = args.input if '.' not in args.input else args.input.split('.')[0]
@@ -108,7 +108,7 @@ def formatFilePath(args):
 
 if __name__ == '__main__':
     args = initializeParser()
-    basePath, inputFile, extension = formatFilePath(args)
+    basePath, inputFile, extension = getFilePath_InputFileName_FileExtension(args)
     logFile = args.output + '_anonymize'
     codeFile = args.output + '_codeFile'
     toManipulate = readJsonFile(basePath+inputFile+extension)
