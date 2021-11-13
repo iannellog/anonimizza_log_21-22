@@ -1,5 +1,4 @@
 import json
-import sys
 import argparse
 
 """
@@ -15,20 +14,29 @@ Origine
 Indirizzo IP
 
 """
-def startParser():
+
+
+def initializeParser():
     parser = argparse.ArgumentParser()
+    parser.add_argument("-p", "--path",
+                        help="The input/output file path",
+                        type=str,
+                        default='indata/')
     parser.add_argument("-i", "--input",
-                        help="The input file path and name",
+                        help="The input file name, no extension",
                         type=str,
-                        default='indata/anonimizza_test1.json')
+                        default="anonimizza_test1"
+                        )
     parser.add_argument("-e", "--extension",
-                        help="Expected file extension",
+                        help="Input/output file extension, including dot (Es -> .json)",
                         type=str,
-                        default='json')
+                        default='.json')
     parser.add_argument("-o", "--output",
-                        help="The output file path and name",
-                        type=str)
+                        help="The output file name, no extension",
+                        type=str,
+                        default='output')
     return parser.parse_args()
+
 
 def readJsonFile(fileName):
     try:
@@ -38,6 +46,9 @@ def readJsonFile(fileName):
         return data
     except OSError as e:
         print(e)
+        exit()
+    except json.JSONDecodeError as jsonFormatError:
+        print('Error! The specified input file doesn\'t contains info in json format.')
         exit()
 
 
@@ -78,31 +89,31 @@ def anonymizeAndGetAssociations(jsonData):
     return userNameToCode
 
 
-def getBaseFilePath(fullPath, extension):
-    extensionsStartsAt = fullPath.find(extension)
-    if extensionsStartsAt == -1:
-        raise IndexError
-    return inputFile[:extensionsStartsAt]
+def formatFilePath(args):
+    # Check if last words contains a dot
+    filePath = args.path
+    inputFileName = args.input
+    fileExtension = args.extension
+    pathSlices = filePath.split('/')
+    lastIndex = len(pathSlices) - 1
+    if '.' in pathSlices[lastIndex]:  # Means that the last element is a file name including extension
+        fileNameAndExtension = pathSlices[lastIndex].split('.')
+        inputFileName = fileNameAndExtension[0]
+        fileExtension = '.' + fileNameAndExtension[1]
+        del pathSlices[lastIndex]
+        filePath = [(element + '/') for element in pathSlices]
+    return filePath, inputFileName, fileExtension
+    # Check if there is the last / in the file path
 
 
-def argsOrDefault(arg, default, append):
-    if arg is not None:
-        return arg + append
-    else:
-        return default + append
+
 
 if __name__ == '__main__':
-    args = startParser()
-    inputFile=args.input
-    print(inputFile)
-    try:
-        basePath = getBaseFilePath(inputFile, args.extension)
-    except IndexError:
-        print(IndexError.__name__, "\nError! the given fileName doesn't contains the specified extension")
-        exit()
-    logFile = argsOrDefault(args.output, basePath, "_anonymized")
-    codeFile = argsOrDefault(args.output, basePath, "_codeFile")
-    toManipulate = readJsonFile(inputFile)
+    args = initializeParser()
+    basePath, inputFile, extension = formatFilePath(args)
+    logFile = args.output + '_anonymize'
+    codeFile = args.output + '_codeFile'
+    toManipulate = readJsonFile(basePath+inputFile+extension)
     idToNameAssociation = anonymizeAndGetAssociations(toManipulate)
-    saveJsonFile(logFile+args.extension, toManipulate)
-    saveJsonFile(codeFile+args.extension, idToNameAssociation)
+    saveJsonFile(basePath+logFile+args.extension, toManipulate)
+    saveJsonFile(basePath+codeFile+args.extension, idToNameAssociation)
