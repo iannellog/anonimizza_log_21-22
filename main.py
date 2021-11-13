@@ -32,7 +32,7 @@ def initializeParser():
                         type=str,
                         default='.json')
     parser.add_argument("-o", "--output",
-                        help="The output file name, no extension",
+                        help="The output file name, no extension, Default = \'output\'",
                         type=str,
                         default='output')
     return parser.parse_args()
@@ -47,7 +47,7 @@ def readJsonFile(fileName):
     except OSError as e:
         print(e)
         exit()
-    except json.JSONDecodeError as jsonFormatError:
+    except json.JSONDecodeError:
         print('Error! The specified input file doesn\'t contains info in json format.')
         exit()
 
@@ -92,8 +92,8 @@ def anonymizeAndGetAssociations(jsonData):
 def formatFilePath(args):
     # Check if last words contains a dot
     filePath = args.path
-    inputFileName = args.input
-    fileExtension = args.extension
+    inputFileName = args.input if '.' not in args.input else args.input.split('.')[0]
+    fileExtension = args.extension if '.' not in args.input else '.' + args.input.split('.')[1]
     pathSlices = filePath.split('/')
     lastIndex = len(pathSlices) - 1
     if '.' in pathSlices[lastIndex]:  # Means that the last element is a file name including extension
@@ -101,11 +101,8 @@ def formatFilePath(args):
         inputFileName = fileNameAndExtension[0]
         fileExtension = '.' + fileNameAndExtension[1]
         del pathSlices[lastIndex]
-        filePath = [(element + '/') for element in pathSlices]
+        filePath = ''.join([(element + '/') for element in pathSlices])
     return filePath, inputFileName, fileExtension
-    # Check if there is the last / in the file path
-
-
 
 
 if __name__ == '__main__':
