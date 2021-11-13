@@ -62,9 +62,11 @@ def saveJsonFile(fileName, dumpData, indent=3):
         exit()
 
 
-def reformatUserNameAndCompleteUserInfo(userLog):
+def reformatUserNameAndCompleteUserInfo(userLog, list):  # Passing list is needed to deleted useless logs
     if userLog[1] == '-' and userLog[2] != '-':
         userLog[1], userLog[2] = userLog[2], userLog[1]
+    elif userLog[1] == '-' and userLog[2] == '-':  # useless log
+        list.remove(userLog)
 
 
 def getUserIndex(userLog, userNameToCode, userIndex):  # TODO: Cange this variable with uuid
@@ -81,7 +83,7 @@ def anonymizeAndGetAssociations(jsonData):
     userIndex = 1
     jsonData = jsonData[0]  # Removing useless list
     for userLog in jsonData:
-        reformatUserNameAndCompleteUserInfo(userLog)
+        reformatUserNameAndCompleteUserInfo(userLog, jsonData)
         currentUserIndex, userIndex = getUserIndex(userLog, userNameToCode, userIndex)
         userLog[1] = currentUserIndex
         userLog.remove(userLog[2])  # Removing involved user info
