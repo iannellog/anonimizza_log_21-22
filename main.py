@@ -68,11 +68,10 @@ def reformatUserNameAndCompleteUserInfo(userLog):
 
 
 def getUserIndex(userLog, userNameToCode, userIndex):  # TODO: Cange this variable with uuid
-    if userLog[1] in userNameToCode:
-        return userNameToCode[userLog[1]], userIndex
+    if userLog[1].lower() in userNameToCode:
+        return userNameToCode[userLog[1].lower()], userIndex
     currentUserIndex = str(userIndex).zfill(5)
-    userNameToCode[
-        userLog[1]] = currentUserIndex  # Create a string of 5 characters adding missing zero before the number
+    userNameToCode[userLog[1].lower()] = currentUserIndex  # Create a string of 5 characters adding missing zero before the number
     userIndex += 1
     return currentUserIndex, userIndex
 
@@ -80,12 +79,12 @@ def getUserIndex(userLog, userNameToCode, userIndex):  # TODO: Cange this variab
 def anonymizeAndGetAssociations(jsonData):
     userNameToCode = {}
     userIndex = 1
-    for logDays in jsonData:
-        for userLog in logDays:
-            reformatUserNameAndCompleteUserInfo(userLog)
-            currentUserIndex, userIndex = getUserIndex(userLog, userNameToCode, userIndex)
-            userLog[1] = currentUserIndex
-            userLog.remove(userLog[2])  # Removing involved user info
+    jsonData = jsonData[0]  # Removing useless list
+    for userLog in jsonData:
+        reformatUserNameAndCompleteUserInfo(userLog)
+        currentUserIndex, userIndex = getUserIndex(userLog, userNameToCode, userIndex)
+        userLog[1] = currentUserIndex
+        userLog.remove(userLog[2])  # Removing involved user info
     return userNameToCode
 
 
