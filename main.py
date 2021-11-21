@@ -30,8 +30,9 @@ def read_and_return_json(path):
         data = json.load(f_in)
         f_in.close()
         return True, data
-    except:
-        return False, []
+    except Exception as e:
+        print(f'Ops! Something went wrong during reading file {path}! Error: {e}')
+        exit()
 
 
 def get_logs_and_users_dict(json_logs_from_file):
@@ -66,27 +67,19 @@ def get_user_anonymous_uuid_and_insert_if_not_present(log, dict_user):
 
 
 def save_to_path(values, path, indent=3):
-    success = True
     try:
         f_out = open(path, 'w')
         json.dump(values, f_out, indent=indent)
         f_out.close()
-    except:
-        success = False
-
-    return success
+    except Exception as e:
+        print(f'Ops! Something went wrong during writing file {path}! Error: {e}')
+        exit()
 
 
 if __name__ == '__main__':
     print('Starting to anonymize logs...')
-    ok, jsonData = read_and_return_json('indata/anonimizza_test1.json')
-    if not ok:
-        print('Ops! Something went wrong during reading file!')
-        exit()
-
+    jsonData = read_and_return_json('indata/anonimizza_test1.json')
     logs, users_dict = get_logs_and_users_dict(jsonData)
-    if save_to_path(logs, 'indata/anonimizza_test1_anonimizzato.json') \
-            and save_to_path(users_dict, 'indata/anonimizza_test1_tab_codici.json'):
-        print('Operations completed successfully!')
-    else:
-        print('Ops! Something went wrong during writing files!')
+    save_to_path(logs, 'indata/anonimizza_test1_anonimizzato.json')
+    save_to_path(users_dict, 'indata/anonimizza_test1_tab_codici.json')
+    print('Operations completed successfully!')
